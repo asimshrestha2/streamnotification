@@ -1,22 +1,32 @@
 <html>
 <head>
-	<link rel="stylesheet" href="main.css" >
+	<link rel="stylesheet" href="main.css" />
 	<!--<meta http-equiv="refresh" content="30">-->
-	<!--<script src="https://streamtip.com/socket.io/socket.io.js" type="text/javascript"></script>-->
-<script>
-    var access_token = 'MzRhNDRhMmYzYTUwZGUyZWNiNzJhZGJj'; // Application OAuth Access Token
+	<script src="https://streamtip.com/socket.io/socket.io.js" type="text/javascript"></script>
+	<script>
+	    var access_token = ''; // Application OAuth Access Token
 
-    var socket = new WebSocket('wss://streamtip.com/ws?access_token=' + encodeURIComponent(access_token));
+	    var socket = io.connect('https://streamtip.com', {
+	        query: 'access_token='+encodeURIComponent(access_token)
+	    });
 
-    socket.onmessage = function(message) {
-        var event = JSON.parse(message.data);
+	    socket.on('error', function(err) {
+	        var code = err.split('::')[0];
 
-        if(event.name === 'newTip') {
-            // We got a new tip!
-            console.log(event.data);
-        }
+	        if(code === '401') {
+	            console.log('authentication failed');
+	        } else if(code === '429') {
+	            console.log('rate limited');
+	        } else if(code === '400') {
+	            console.log('bad request');
+	        }
+	    });
+
+	    socket.on('newTip', function (data) {
+	        // We got a new tip!
+	        console.log(data);
     };
-</script>
+	</script>
 </head>
 <body>
 <div id="content">
