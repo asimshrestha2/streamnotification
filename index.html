@@ -87,77 +87,67 @@
 			-webkit-animation: text_ani 20s 0s;
 		}
 	</style>
-	<script src="https://streamtip.com/socket.io/socket.io.js" type="text/javascript"></script>
+	<!--<script src="https://streamtip.com/socket.io/socket.io.js" type="text/javascript"></script>-->
 <script>
     var access_token = 'MzRhNDRhMmYzYTUwZGUyZWNiNzJhZGJj'; // Application OAuth Access Token
 
-    var socket = io.connect('https://streamtip.com', {
-        query: 'access_token='+encodeURIComponent(access_token)
-    });
+    var socket = new WebSocket('wss://streamtip.com/ws?access_token=' + encodeURIComponent(access_token));
 
-    socket.on('error', function(err) {
-        var code = err.split('::')[0];
+    socket.onmessage = function(message) {
+        var event = JSON.parse(message.data);
 
-        if(code === '401') {
-            console.log('authentication failed');
-        } else if(code === '429') {
-            console.log('rate limited');
-        } else if(code === '400') {
-            console.log('bad request');
-        }
-    });
-
-    socket.on('newTip', function (data) {
-        // We got a new tip!
-        console.log(data);
-        /*
-            {
-                "_id" : "5517a758964def7137164238",
-                "amount" : "100.00",
-                "cents" : 10000,
-                "channel" : "5456997a68db94ce04a5f4c3",
-                "currencyCode" : "USD",
-                "currencySymbol" : "$",
-                "date" : "2014-06-04T22:58:01.202Z",
-                "email" : "concerndoge@test.com",
-                "user" : {
-                    "_id" : "5456997a68db94ce04a5f4c3",
-                    "avatar" : "https://link.to/avatar/image.png",
-                    "displayName" : "Test",
-                    "name" : "test",
-                    "provider" : "twitch",
-                    "providerId" : 10101
-                },
-                "goal" : {
-                    "_id" : "5455caccdd398acb7a28c3f0",
-                    "user" : "55c3c0e744fd81974d98fdb5",
-                    "cents" : 100000,
-                    "description" : "testing",
-                    "title" : "test goal",
-                    "countReversals" : false,
-                    "deleted" : false,
-                    "startDate" : "2015-08-01T11:15:00.000Z",
-                    "endDate" : "2015-08-05T11:15:00.000Z",
-                    "amount" : "1000.00",
-                    "progress" : {
-                        "percentage" : 10.5,
-                        "tips" : 2,
-                        "amount" : "105.00",
-                        "cents" : 10500,
-                        "currencyCode" : "USD",
-                        "currencySymbol" : "$"
+        if(event.name === 'newTip') {
+            // We got a new tip!
+            console.log(event.data);
+            /*
+                {
+                    "_id" : "5517a758964def7137164238",
+                    "amount" : "100.00",
+                    "cents" : 10000,
+                    "channel" : "5456997a68db94ce04a5f4c3",
+                    "currencyCode" : "USD",
+                    "currencySymbol" : "$",
+                    "date" : "2014-06-04T22:58:01.202Z",
+                    "email" : "concerndoge@test.com",
+                    "user" : {
+                        "_id" : "5456997a68db94ce04a5f4c3",
+                        "avatar" : "https://link.to/avatar/image.png",
+                        "displayName" : "Test",
+                        "name" : "test",
+                        "provider" : "twitch",
+                        "providerId" : 10101
                     },
-                    "active" : true
-                },
-                "firstName" : "Test",
-                "lastName" : "User",
-                "note" : "such wow, very test",
-                "processor" : "PayPal",
-                "transactionId" : "4K2N0D835234BWKC",
-                "username" : "im_a_test_user"
-            }
-        */
-    });
+                    "goal" : {
+                        "_id" : "5455caccdd398acb7a28c3f0",
+                        "user" : "55c3c0e744fd81974d98fdb5",
+                        "cents" : 100000,
+                        "description" : "testing",
+                        "title" : "test goal",
+                        "countReversals" : false,
+                        "deleted" : false,
+                        "startDate" : "2015-08-01T11:15:00.000Z",
+                        "endDate" : "2015-08-05T11:15:00.000Z",
+                        "amount" : "1000.00",
+                        "progress" : {
+                            "percentage" : 10.5,
+                            "tips" : 2,
+                            "amount" : "105.00",
+                            "cents" : 10500,
+                            "currencyCode" : "USD",
+                            "currencySymbol" : "$"
+                        },
+                        "active" : true
+                    },
+                    "firstName" : "Test",
+                    "lastName" : "User",
+                    "note" : "such wow, very test",
+                    "processor" : "PayPal",
+                    "transactionId" : "4K2N0D835234BWKC",
+                    "username" : "im_a_test_user"
+                }
+            */
+        }
+    };
 </script>
 </head>
 <body>
