@@ -28,9 +28,16 @@
 	        console.log(data);
     	});
 
-			var datalog = $.post( "https://streamtip.com/api/oauth2/token", { client_id: "John",
-				client_secre: "2pm", grant_type: auth_code, redirect_uri: "https://asimshrestha2.github.io/streamnotification/index.html" , code: auth_code } );
-			console.log(datalog);
+			var invocation = new XMLHttpRequest();
+			var url = 'http://bar.other/resources/public-data/';
+
+			function callOtherDomain() {
+			  if(invocation) {
+			    invocation.open('GET', url, true);
+			    invocation.onreadystatechange = handler;
+			    invocation.send();
+			  }
+			}
 	</script>
 </head>
 <body>
@@ -45,5 +52,6 @@
 	</div>
 </div>
 <div id="shadow"></div>
+<a href="https://streamtip.com/api/oauth2/authorize?response_type=code&client_id=85eb3cb7963b24fa6e4fcddf0b3761ad&redirect_uri=https://asimshrestha2.github.io/streamnotification/index.html">Authentication Click</a>
 </body>
 </html>
