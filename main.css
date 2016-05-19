@@ -81,3 +81,12 @@ div{
   overflow: hidden;
   -webkit-animation: text_ani 20s 0s;
 }
+
+.btn {
+  position: fixed;
+  left: 10;
+  bottom: 10;
+  background: #212121;
+  color: #FFFFFF;
+  padding: 5px;
+}
